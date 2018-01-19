@@ -1,6 +1,7 @@
 const express  = require('express');
 const app      = express();
-const morgan = require('morgan');
+const morgan   = require('morgan');
+const cors     = require('cors');
 const mongoose = require('mongoose');
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
 const PORT     = process.env.PORT||3000;
@@ -10,10 +11,7 @@ require('pretty-error').start();
 
 // mongoose promise library
 mongoose.Promise = global.Promise;
-
-mongoose.connect(mongoURI,{
-  useMongoClient:true
-});
+mongoose.connect(mongoURI,{});
 
 // Error / success
 db.on('error', (err) => console.log(err.message + ' is Mongod not running?'));
@@ -23,7 +21,9 @@ db.on('disconnected', () => console.log('mongo disconnected'));
 db.on('open',() => {
 
 });
+
 // middleware
+app.use(cors());
 app.use(express.urlencoded({
   extended:false
 }));
@@ -68,6 +68,3 @@ app.listen(PORT, () => {
 
 
 //
-app.listen(PORT,() => {
-  console.log("CFAC_API Listening On PORT: "+PORT);
-});
