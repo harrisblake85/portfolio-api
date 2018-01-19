@@ -1,0 +1,27 @@
+{
+  "name": "creativesforacause_api",
+  "version": "1.0.0",
+  "description": "CFAC API Node.js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harrisblake85/creativesforacause_api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harrisblake85/creativesforacause_api/issues"
+  },
+  "homepage": "https://github.com/harrisblake85/creativesforacause_api#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.0.0",
+    "morgan": "^1.9.0",
+    "pretty-error": "^2.1.1"
+  }
+}
