@@ -6,7 +6,7 @@ const submissionSchema = mongoose.Schema({
   desc    : String,
   likes   : {type:Number, default:0}
 
-});
+}, {timestamps:true});
 
 //
 // ,user    : {type: mongoose.Schema.Types.ObjectID, ref:'User'}
