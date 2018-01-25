@@ -6,8 +6,6 @@ const userSchema = new mongoose.Schema({
 
   password: {type:String, minlength:2},
 
-  admin   : {type:Boolean, default:false},
-
   img     : {type:String}
 
 }, {timestamps:true});

@@ -1,9 +1,12 @@
 const express  = require('express');
 const app      = express();
+// const session  = require('express-session');
 const morgan   = require('morgan');
 const cors     = require('cors');
 const mongoose = require('mongoose');
+
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
+require('dotenv').config();
 const PORT     = process.env.PORT||3010;
 
 const db = mongoose.connection;
@@ -31,23 +34,32 @@ app.use(express.json());
 app.use(morgan('tiny'));
 // end middleware
 
+const authUser = async (req, res) => {
+  console.log('Running auth middleware...');
+  const token = req.headers['x-access-token']
+  if (!token) {
+    console.log('no auth token, no user set in req.user')
+  }
+
+  else {
+    try {
+      const decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
+      console.log('decoded token: ', decodedToken);
+      req.user = decodedToken;
+    } catch (e) {
+      console.log('failed to authenticate, no user set in req.user')
+    }
+
+
+  }
+}
+
 //Routes
 const submissionsController = require('./controllers/submissions.js');
 
-// const usersController = require('./controllers/users.js');
-// const sessionsController = require('./controllers/sessions.js');
-// enable sessions
+const usersController = require('./controllers/users.js');
 
-// app.use(session({
-//   secret: "homestarrunner.net... it's dot com!",
-//   resave: true,
-//   saveUninitialized: false,
-//   maxAge: 2592000000
-// }));
-
-// enable controllers
-
-// app.use('/users', usersController);
+app.use('/users', usersController);
 // app.use('/sessions', sessionsController);
 
 app.use('/submissions', submissionsController);
