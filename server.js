@@ -4,7 +4,7 @@ const morgan   = require('morgan');
 const cors     = require('cors');
 const mongoose = require('mongoose');
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
-const PORT     = process.env.PORT||3000;
+const PORT     = process.env.PORT||3010;
 
 const db = mongoose.connection;
 require('pretty-error').start();

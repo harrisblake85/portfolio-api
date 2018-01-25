@@ -18,15 +18,18 @@ router.put("/:id", async (req,res) => {
   res.status(200).json(submission)
 });
 
+router.get("/:id", async (req,res) => {
+  console.log(req.params.id);
+  const submission = await Submission.findById(req.params.id);
+  res.status(200).json(submission)
+});
+
 router.delete("/:id", async (req,res) => {
   const submission = await Submission.findByIdAndRemove(req.params.id,req.body);
   res.status(200).json(submission)
 });
 
-router.get("/:id", async (req,res) => {
-  const submissions = await Submission.findById(req.params.id);
-  res.status(200).json(submission)
-});
+
 
 router.get("/", async (req,res) => {
   const submissions = await Submission.find();
