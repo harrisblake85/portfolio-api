@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const User = require('../models/user');
+const User = require('../models/user.js');
+const Submission = require('../models/submission.js');
 
 // get user index
 router.get('/', async (req, res) => {
