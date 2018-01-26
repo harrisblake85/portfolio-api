@@ -30,24 +30,29 @@ router.get('/:id/like/:subid', async (req, res) => {
 // login an authenticated user, create a token
 router.post('/login', async (req, res) => {
   console.log('req.body: ', req.body)
-  if (req.body.password && req.body.username) {
+    try {
       const user = await User.findOne({ username: req.body.username });
-    if (user.authenticate(req.body.password)) {
-      const token = jwt.sign({
-        id: user.id,
-        username: user.username,
-        img: user.img
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '14d' }
-    )
-    res.json({ status: 200, user: user, token: token });
+      if ( user.authenticate(req.body.password)) {
+        const token = jwt.sign({
+          id: user.id,
+          username: user.username,
+          img: user.img
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '14d' }
+      )
+      res.status(200).json({ user: user, token: token });
+    }
+
+  else {
+    console.log('Didnt Enter Username / Password!');
+    res.status(400).json({message: 'Didnt Enter Username / Password!' });
   }
-}
-else {
-  console.log('Didnt Enter Username / Password!');
-  res.status(400).send({message: 'Didnt Enter Username / Password!' });
-}
+    } catch (e) {
+      res.status(418).json({message: 'That user doesnt exist'})
+    }
+
+
 
 // end login
 });
@@ -70,7 +75,7 @@ router.post('/', async (req, res) => {
   res.json({ status: 201, user: user, token: token })
 
   } catch (e) {
-    res.status(400).send({message: e.message });
+    res.status(400).send({message: "User Could Not Be Created" });
   }
 
 
