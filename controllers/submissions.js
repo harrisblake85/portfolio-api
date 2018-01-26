@@ -61,13 +61,8 @@ router.get("/like/:id", async (req,res) => {
 });
 
 router.get("/", async (req,res) => {
-  Submission.find()
-  .paginate(1, 1)
-  .exec(function(err, docs) {
-    console.log('docs: ', docs)
-    res.status(200).json({submissions:docs})
-  });
-
+  const submissions = await Submission.find()
+    res.status(200).json(submissions);
 });
 // "http://localhost:3010/submissions/page/1/likes/-1"
 router.get("/page/:num/:sort/:asc", async (req,res) => {
