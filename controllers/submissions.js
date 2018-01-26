@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-
+const express    = require('express');
+const router     = express.Router();
+const pagination = require ('mongoose-pagination')
 const Submission = require('../models/submission.js');
 const User       = require('../models/user.js');
 
@@ -61,8 +61,25 @@ router.get("/like/:id", async (req,res) => {
 });
 
 router.get("/", async (req,res) => {
-  const submissions = await Submission.find();
-  res.status(200).json(submissions)
+  Submission.find()
+  .paginate(1, 1)
+  .exec(function(err, docs) {
+    console.log('docs: ', docs)
+    res.status(200).json({submissions:docs})
+  });
+
+});
+// "http://localhost:3010/submissions/page/1/likes/-1"
+router.get("/page/:num/:sort/:asc", async (req,res) => {
+  // console.log(req);
+  console.log(req.params);
+  Submission.find({},{},{sort:{[req.params.sort]:parseInt(req.params.asc)}})
+  .paginate(parseInt(req.params.num), 10)
+  .exec(function(err, docs) {
+    console.log('docs: ', docs)
+    res.status(200).json({submissions:docs})
+  });
+
 });
 
 
