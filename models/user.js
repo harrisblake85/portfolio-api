@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
 
   password: {type:String, minlength:2},
 
-  img     : {type:String}
+  img     : {type:String},
+  liked   : [{type: mongoose.Schema.Types.ObjectId, ref:'Submission',unique:true,sparse:true}]
 
 }, {timestamps:true});
 

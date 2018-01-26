@@ -4,6 +4,7 @@ const app      = express();
 const morgan   = require('morgan');
 const cors     = require('cors');
 const mongoose = require('mongoose');
+const jwt      = require('jsonwebtoken');
 
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
 require('dotenv').config();
@@ -34,20 +35,24 @@ app.use(express.json());
 app.use(morgan('tiny'));
 // end middleware
 
-const authUser = async (req, res) => {
+const authUser = async (req, res, next) => {
   console.log('Running auth middleware...');
-  const token = req.headers['x-access-token']
+  const token =  await req.headers['x-access-token']
   if (!token) {
     console.log('no auth token, no user set in req.user')
+    next()
   }
 
   else {
     try {
       const decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
       console.log('decoded token: ', decodedToken);
-      req.user = decodedToken;
+      req.user = await decodedToken;
     } catch (e) {
+      console.log(e);
       console.log('failed to authenticate, no user set in req.user')
+    } finally {
+      next()
     }
 
 
@@ -62,7 +67,7 @@ const usersController = require('./controllers/users.js');
 app.use('/users', usersController);
 // app.use('/sessions', sessionsController);
 
-app.use('/submissions', submissionsController);
+app.use('/submissions',authUser, submissionsController);
 
 app.listen(PORT, () => {
   console.log("CFAC Listening on PORT: ", PORT);

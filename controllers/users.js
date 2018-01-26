@@ -6,10 +6,21 @@ const User = require('../models/user.js');
 const Submission = require('../models/submission.js');
 
 // get user index
-router.get('/', async (req, res) => {
+router.get('/', async (req, res,) => {
   try {
     const users = await User.find()
     res.status(200).json(users);
+  }catch (e) {
+    res.status(400).send({message: e.message });
+  }
+  // end get
+});
+
+// get user
+router.get('/:id/like/:subid', async (req, res) => {
+  try {
+    const user = await User.findById(req.body.id)
+    res.status(200).json(user);
   }catch (e) {
     res.status(400).send({message: e.message });
   }

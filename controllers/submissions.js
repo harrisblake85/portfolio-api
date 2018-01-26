@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 const Submission = require('../models/submission.js');
+const User       = require('../models/user.js');
 
 router.post("/", async (req,res) => {
   const submission = await Submission.create(req.body);
-  res.status(200).json(submission)
+  res.status(201).json(submission)
 });
 
 router.get("/best", async (req,res) => {
@@ -20,28 +21,49 @@ router.put("/:id", async (req,res) => {
 
 router.get("/:id", async (req,res) => {
   console.log(req.params.id);
-  const submission = await Submission.findById(req.params.id);
+  const submission = await Submission.findOne({_id:req.params.id});
   res.status(200).json(submission)
 });
 
 router.delete("/:id", async (req,res) => {
-  const submission = await Submission.findByIdAndRemove(req.params.id,req.body);
-  res.status(200).json(submission)
+  const submission = await Submission.findByIdAndRemove(req.params.id);
+  res.status(202).json(submission)
 });
 
+router.get("/like/:id", async (req,res) => {
+  console.log("Req.User: ",req.user);
+  if (req.user) {
+    try {
+      const user       = await User.findById(req.user.id);
+      const submission = await Submission.findById(req.params.id);
 
+      submission.likes = submission.likes+1 || 0;
+      submission.likers.push(user.id);
+      await user.liked.push(submission);
+      console.log(user);
+      try {
+        await user.save();
+        await submission.save();
+        res.status(200).json({submission,user});
+      } catch (e) {
+        res.status(418).json({message:"User Already Liked This Submission!"});
+      }
+    } catch (e) {
+      res.status(404).json({message:"Unable To Find User Or Submission"});
+    }
+
+
+  }
+  else{
+    res.status(401).json({message:"You have to login to like a submission!"})
+  }
+
+});
 
 router.get("/", async (req,res) => {
   const submissions = await Submission.find();
   res.status(200).json(submissions)
 });
-
-
-
-
-
-
-
 
 
 
