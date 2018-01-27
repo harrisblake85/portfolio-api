@@ -72,7 +72,8 @@ router.get("/page/:num/:sort/:asc", async (req,res) => {
   .paginate(parseInt(req.params.num), 10)
   .exec(function(err, docs) {
     console.log('docs: ', docs)
-    res.status(200).json({submissions:docs})
+    const submissions = docs;
+    res.status(200).json(submissions);
   });
 
 });

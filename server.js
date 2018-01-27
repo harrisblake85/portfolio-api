@@ -10,7 +10,7 @@ const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
 require('dotenv').config();
 const PORT     = process.env.PORT||3010;
 
-const db = mongoose.connection;
+const db = mongoosenp.connection;
 require('pretty-error').start();
 
 // mongoose promise library
