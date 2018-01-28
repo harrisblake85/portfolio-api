@@ -6,10 +6,15 @@ const userSchema = new mongoose.Schema({
 
   password: {type:String, minlength:2},
 
-  img     : {type:String},
-  liked   : [{type: mongoose.Schema.Types.ObjectId, ref:'Submission',unique:true,sparse:true}]
+  img     : {type:String, default:"https://www.w3schools.com/w3css/img_avatar3.png"},
+  email   : {type:String, default:"noemail@nomail.com"},
+  liked   : [{type: mongoose.Schema.Types.ObjectId, ref:'Submission'}]
 
 }, {timestamps:true});
+
+const onlyUnique = (value, index, self) => {
+    return self.indexOf(value) === index;
+}
 
 userSchema.pre('save', function(next) {
   if (this.isModified('password')) {
@@ -17,8 +22,18 @@ userSchema.pre('save', function(next) {
     this.password = hashedPassword;
   }
 
+  if (this.isModified('email')) {
+    // make more emailish
+  }
+
+  if (this.isModified('liked')) {
+    console.log("ayy");
+    this.liked = this.liked.filter(onlyUnique)
+  }
+
   next();
 });
+
 
 userSchema.methods.authenticate = function(password) {
   return bcrypt.compareSync(password, this.password);

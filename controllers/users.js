@@ -16,10 +16,10 @@ router.get('/', async (req, res,) => {
   // end get
 });
 
-// get user
-router.get('/:id/like/:subid', async (req, res) => {
+router.get('/current', async (req, res,) => {
+  console.log(req.user);
   try {
-    const user = await User.findById(req.body.id)
+    const user = await User.findById(req.user.id)
     res.status(200).json(user);
   }catch (e) {
     res.status(400).send({message: e.message });
@@ -36,12 +36,15 @@ router.post('/login', async (req, res) => {
         const token = jwt.sign({
           id: user.id,
           username: user.username,
-          img: user.img
+          img: user.img,
+          liked: user.liked
         },
         process.env.JWT_SECRET,
         { expiresIn: '14d' }
-      )
-      res.status(200).json({ user: user, token: token });
+      );
+
+      console.log(user);
+      res.status(200).json({user, token});
     }
 
   else {
@@ -52,30 +55,32 @@ router.post('/login', async (req, res) => {
       res.status(418).json({message: 'That user doesnt exist'})
     }
 
-
-
 // end login
 });
+const getToken = (user) => {
 
+}
 // create user and jwt token
 router.post('/', async (req, res) => {
   console.log('request from client: ', req.body);
   try {
     const user = await User.create(req.body);
+    console.log("User:"+user);
     const token = jwt.sign(
     {
       id: user.id,
       username: user.username,
-      img: user.img
+      img: user.img,
+      liked: []
 
     },
     process.env.JWT_SECRET,
     { expiresIn: '14d' }
   )
-  res.json({ status: 201, user: user, token: token })
+  res.status(201).json({user, token})
 
   } catch (e) {
-    res.status(400).send({message: "User Could Not Be Created" });
+    res.status(400).send({message: e.errmsg });
   }
 
 

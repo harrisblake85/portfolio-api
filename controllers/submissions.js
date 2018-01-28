@@ -3,6 +3,7 @@ const router     = express.Router();
 const pagination = require ('mongoose-pagination')
 const Submission = require('../models/submission.js');
 const User       = require('../models/user.js');
+const jwt        = require('jsonwebtoken');
 
 router.post("/", async (req,res) => {
   const submission = await Submission.create(req.body);
@@ -30,23 +31,32 @@ router.delete("/:id", async (req,res) => {
   res.status(202).json(submission)
 });
 
-router.get("/like/:id", async (req,res) => {
-  console.log("Req.User: ",req.user);
+router.get("/like/:id/", async (req,res) => {
   if (req.user) {
     try {
       const user       = await User.findById(req.user.id);
       const submission = await Submission.findById(req.params.id);
-
       submission.likes = submission.likes+1 || 0;
-      submission.likers.push(user.id);
-      await user.liked.push(submission);
-      console.log(user);
+      await submission.likers.push(user.id);
+      await user.liked.push(submission.id);
+
       try {
+
         await user.save();
         await submission.save();
-        res.status(200).json({submission,user});
+
+        const token = jwt.sign({
+          id: user.id,
+          username: user.username,
+          img: user.img,
+          liked: user.liked
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '14d' }
+      );
+        res.status(200).json({submission,user,token});
       } catch (e) {
-        res.status(418).json({message:"User Already Liked This Submission!"});
+        res.status(418).json({message:e.message});
       }
     } catch (e) {
       res.status(404).json({message:"Unable To Find User Or Submission"});

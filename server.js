@@ -64,7 +64,7 @@ const submissionsController = require('./controllers/submissions.js');
 
 const usersController = require('./controllers/users.js');
 
-app.use('/users', usersController);
+app.use('/users', authUser, usersController);
 // app.use('/sessions', sessionsController);
 
 app.use('/submissions',authUser, submissionsController);
