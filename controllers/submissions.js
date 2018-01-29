@@ -12,8 +12,13 @@ router.post("/", async (req,res) => {
 });
 
 router.get("/best", async (req,res) => {
-  const submission = await Submission.findOne({},{},{sort:{likes:-1},limit:1});
-  res.status(200).json(submission)
+  try {
+    const submission = await Submission.findOne({},{},{sort:{likes:-1},limit:1});
+
+  } catch (e) {
+    res.status(200).json({title:"Not Found"})
+  }
+
 });
 
 router.put("/:id", async (req,res) => {
