@@ -6,6 +6,7 @@ const User       = require('../models/user.js');
 const jwt        = require('jsonwebtoken');
 
 router.post("/", async (req,res) => {
+  console.log(req.body);
   const submission = await Submission.create(req.body);
   res.status(201).json(submission)
 });

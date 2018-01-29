@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const submissionSchema = mongoose.Schema({
-  title   : {type:String, default:"A Title Goes Here"},
-  img     : {type:String, default:"https://i.imgur.com/3ssLtPT.png"},
-  desc    : {type:String, default:"A Description Goes Here"},
+  title   : {type:String, unique:true, required:true},
+  img     : {type:String, unique:true, required:true},
+  desc    : {type:String, unique:true, required:true},
   likes   : {type:Number, default:0},
   creator : {type: mongoose.Schema.Types.ObjectId, ref:'User'},
   likers  : [{type: mongoose.Schema.Types.ObjectId, ref:'User'}]
