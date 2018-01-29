@@ -63,7 +63,7 @@ const authUser = async (req, res, next) => {
 const submissionsController = require('./controllers/submissions.js');
 
 const usersController = require('./controllers/users.js');
-app.controller('/', async (req,res) => {
+app.get('/', async (req,res) => {
   res.send({message:"Hello!"})
 });
 app.use('/users', authUser, usersController);
