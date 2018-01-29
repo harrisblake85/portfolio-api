@@ -15,10 +15,16 @@ router.get("/best", async (req,res) => {
   let submission
   try {
      submission = await Submission.findOne({},{},{sort:{likes:-1},limit:1});
-     res.status(200).json(submission)
+     if (submission) {
+       res.status(200).json(submission)
+     }
+     else {
+       submission = {title:"Not Found"}
+       res.status(400).json(submission)
+     }
+
   } catch (e) {
-    submission = {title:"Not Found"}
-    res.status(400).json(submission)
+    console.log(e);
   }
 
 });
