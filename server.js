@@ -64,7 +64,7 @@ const submissionsController = require('./controllers/submissions.js');
 
 const usersController = require('./controllers/users.js');
 app.get('/', async (req,res) => {
-  res.send({message:"Hello!"})
+  res.send({message:"Hello Welcome To Creatives For A Cause API!"})
 });
 app.use('/users', authUser, usersController);
 // app.use('/sessions', sessionsController);
