@@ -25,8 +25,15 @@ const mailOptions = {
 transporter.sendMail(mailOptions, function (err, info) {
    if(err)
      console.log(err)
+     console.log("DIDNT SEND EMAIL");
+     console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");
    else
      console.log(info);
+     console.log("DID SEND EMAIL");
+     console.log("DID SEND EMAIL");
+     console.log("DID SEND EMAIL");
+     console.log("DID SEND EMAIL");
+     console.log("DID SEND EMAIL");
 });
 
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
