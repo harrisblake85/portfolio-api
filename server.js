@@ -82,20 +82,8 @@ app.get('/', async (req,res) => {
     html: '<p>Your html here</p>'// plain text body
   };
 
-  transporter.sendMail(mailOptions, function (err, info) {
-     if(err)
-       console.log(err)
-       console.log("DIDNT SEND EMAIL");
-       console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");
-     else
-       console.log(info);
-       console.log("DID SEND EMAIL");
-       console.log("DID SEND EMAIL");
-       console.log("DID SEND EMAIL");
-       console.log("DID SEND EMAIL");
-       console.log("DID SEND EMAIL");
-  });
-  
+  transporter.sendMail(mailOptions);
+
   res.send({message:"Hello Welcome To Creatives For A Cause API!"})
 });
 app.use('/users', authUser, usersController);
