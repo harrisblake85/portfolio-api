@@ -92,8 +92,8 @@ router.get("/cart/checkout", async (req,res) => {
       var send = require('gmail-send')({
         user: process.env.GMAIL_EMAIL,
         pass: process.env.GMAIL_PASS,
-        to:   user.email,
-        html:    '<div><b>Thanks For Ordering!</b> <b>Your Purchase:</b></div>'
+        to:user.email,
+        html:'<b>Thanks For Ordering!</b>'
       });
 
 
