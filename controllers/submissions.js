@@ -84,6 +84,42 @@ router.get("/like/:id/", async (req,res) => {
 
 });
 
+router.get("/cart/:id/", async (req,res) => {
+  if (req.user) {
+    try {
+      const user       = await User.findById(req.user.id);
+      const submission = await Submission.findById(req.params.id);
+      // submission.likes = submission.likes+1 || 0;
+      await user.cart.push(submission.id);
+
+      try {
+
+        await user.save();
+        const token = jwt.sign({
+          id: user.id,
+          username: user.username,
+          img: user.img,
+          cart: user.cart
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '14d' }
+      );
+        res.status(200).json({submission,user,token});
+      } catch (e) {
+        res.status(418).json({message:e.message});
+      }
+    } catch (e) {
+      res.status(404).json({message:"Unable To Add That Item To Your Cart"});
+    }
+
+
+  }
+  else{
+    res.status(401).json({message:"You have to login to cart a submission!"})
+  }
+
+});
+
 router.get("/", async (req,res) => {
   const submissions = await Submission.find()
     res.status(200).json(submissions);

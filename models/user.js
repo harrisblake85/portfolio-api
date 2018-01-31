@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
 
   img     : {type:String, default:"https://www.w3schools.com/w3css/img_avatar3.png"},
   email   : {type:String, default:"noemail@nomail.com"},
-  liked   : [{type: mongoose.Schema.Types.ObjectId, ref:'Submission'}]
+  liked   : [{type: mongoose.Schema.Types.ObjectId, ref:'Submission'}],
+  cart    : [{type: mongoose.Schema.Types.ObjectId, ref:'Submission'}]
 
 }, {timestamps:true});
 
@@ -29,6 +30,11 @@ userSchema.pre('save', function(next) {
   if (this.isModified('liked')) {
     console.log("ayy");
     this.liked = this.liked.filter(onlyUnique)
+  }
+
+  if (this.isModified('cart')) {
+    console.log("ayycart");
+    this.cart = this.cart.filter(onlyUnique)
   }
 
   next();
