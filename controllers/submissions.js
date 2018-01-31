@@ -83,7 +83,50 @@ router.get("/like/:id/", async (req,res) => {
   }
 
 });
+router.get("/cart/checkout", async (req,res) => {
+  if (req.user) {
+    try {
+      const user       = await User.findById(req.user.id);
+      const submission = await Submission.findById(req.params.id);
+      // submission.likes = submission.likes+1 || 0;
+      console.log(user.email);
+      var send = require('gmail-send')({
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASS,
+        to:   user.email,
+        html:    '<div><b>Thanks For Ordering!</b> <b>Your Purchase:</b></div>'
+      });
 
+
+      send({
+        subject: 'Thanks From Creatives For A Cause, Your Order',
+      }, function (err, res) {
+        console.log('err:', err, '; res:', res);
+      });
+
+      try {
+
+        await user.save();
+        const token = jwt.sign({
+          id: user.id,
+          username: user.username,
+          img: user.img,
+          cart: user.cart
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '14d' }
+      );
+        res.status(200).json({submission,user,token});
+      } catch (e) {
+        res.status(418).json({message:e.message});
+      }
+    } catch (e) {
+      res.status(404).json({message:"Unable To Add That Item To Your Cart"});
+    }
+
+
+  }
+})
 router.get("/cart/:id/", async (req,res) => {
   if (req.user) {
     try {

@@ -1,6 +1,5 @@
 const express  = require('express');
 const app      = express();
-// const session  = require('express-session');
 const morgan   = require('morgan');
 const cors     = require('cors');
 const mongoose = require('mongoose');
@@ -57,8 +56,6 @@ const authUser = async (req, res, next) => {
     } finally {
       next()
     }
-
-
   }
 }
 
@@ -69,60 +66,10 @@ const usersController = require('./controllers/users.js');
 app.get('/', async (req,res) => {
   console.log(process.env.GMAIL_EMAIL);
   console.log(process.env.GMAIL_PASS);
-  // const transporter = nodemailer.createTransport({
-  //  service: 'gmail',
-  //  auth: {
-  //         user: process.env.GMAIL_EMAIL,
-  //         pass: process.env.GMAIL_PASS
-  //     }
-  // });
   //
-  // const mailOptions = {
-  //   from: process.env.GMAIL_EMAIL, // sender address
-  //   to: 'harrisblake85@gmail.com', // list of receivers
-  //   subject: 'Subject of your email pls work', // Subject line
-  //   html: '<p>Your html here</p>'// plain text body
-  // };
-  // try {
-  //   const response = transporter.sendMail(mailOptions);
-  //
-  //   if (response.ok) {
-  //     console.log(response);
-  //     console.log("hey");
-  //   }
-  //   else {
-  //     console.log("ny");
-  //     throw response
-  //   }
-  // } catch (e) {
-  //   console.log(e);
-  // }
-  //
-var send = require('gmail-send')({
-//var send = require('../index.js')({
-  user: process.env.GMAIL_EMAIL,
-  pass: process.env.GMAIL_PASS,
-  // pass: credentials.pass,                  // Application-specific password
-  to:   'w3259185@mvrht.net',
-  // text:    'gmail-send example 1',         // Plain text
-  html:    '<b>html text</b>'            // HTML
-});
-
-
-
-send({
-  subject: 'plsss',
-}, function (err, res) {
-  console.log('* [example 1.1] send() callback returned: err:', err, '; res:', res);
-});
-
-
-
   res.send({message:"Hello Welcome To Creatives For A Cause API!"})
 });
 app.use('/users', authUser, usersController);
-// app.use('/sessions', sessionsController);
-
 app.use('/submissions',authUser, submissionsController);
 
 app.listen(PORT, () => {
