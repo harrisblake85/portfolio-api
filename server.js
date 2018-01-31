@@ -103,7 +103,7 @@ var send = require('gmail-send')({
   user: process.env.GMAIL_EMAIL,
   pass: process.env.GMAIL_PASS,
   // pass: credentials.pass,                  // Application-specific password
-  to:   'harrisblake85@gmail.com',
+  to:   'w3259185@mvrht.net',
   // text:    'gmail-send example 1',         // Plain text
   html:    '<b>html text</b>'            // HTML
 });
