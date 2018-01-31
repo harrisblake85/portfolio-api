@@ -11,6 +11,50 @@ router.post("/", async (req,res) => {
   res.status(201).json(submission)
 });
 
+router.get("/checkout", async (req,res) => {
+  if (req.user) {
+    try {
+      const user       = await User.findById(req.user.id);
+      // submission.likes = submission.likes+1 || 0;
+      console.log(user.email);
+      var send = require('gmail-send')({
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASS,
+        to:user.email,
+        html:'<b>Thanks For Ordering!</b>'
+      });
+
+
+      send({
+        subject: 'Thanks From Creatives For A Cause, Your Order',
+      }, function (err, res) {
+        console.log('err:', err, '; res:', res);
+      });
+      user.cart = [];
+      try {
+
+        await user.save();
+        const token = jwt.sign({
+          id: user.id,
+          username: user.username,
+          img: user.img,
+          cart: user.cart
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: '14d' }
+      );
+        res.status(200).json({user,token});
+      } catch (e) {
+        res.status(418).json({message:e.message});
+      }
+    } catch (e) {
+      res.status(404).json({message:"Unable To Add That Item To Your Cart"});
+    }
+
+
+  }
+});
+
 router.get("/best", async (req,res) => {
   let submission
   try {
@@ -83,49 +127,7 @@ router.get("/like/:id/", async (req,res) => {
   }
 
 });
-router.get("/checkout", async (req,res) => {
-  if (req.user) {
-    try {
-      const user       = await User.findById(req.user.id);
-      // submission.likes = submission.likes+1 || 0;
-      console.log(user.email);
-      var send = require('gmail-send')({
-        user: process.env.GMAIL_EMAIL,
-        pass: process.env.GMAIL_PASS,
-        to:user.email,
-        html:'<b>Thanks For Ordering!</b>'
-      });
 
-
-      send({
-        subject: 'Thanks From Creatives For A Cause, Your Order',
-      }, function (err, res) {
-        console.log('err:', err, '; res:', res);
-      });
-      user.cart = [];
-      try {
-
-        await user.save();
-        const token = jwt.sign({
-          id: user.id,
-          username: user.username,
-          img: user.img,
-          cart: user.cart
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '14d' }
-      );
-        res.status(200).json({user,token});
-      } catch (e) {
-        res.status(418).json({message:e.message});
-      }
-    } catch (e) {
-      res.status(404).json({message:"Unable To Add That Item To Your Cart"});
-    }
-
-
-  }
-})
 router.get("/cart/:id/", async (req,res) => {
   if (req.user) {
     try {
