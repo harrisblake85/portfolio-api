@@ -86,8 +86,6 @@ app.get('/', async (req,res) => {
   try {
     const response = transporter.sendMail(mailOptions);
     console.log(response);
-    const json = response.json();
-    console.log(json);
   } catch (e) {
     console.log(e);
   }
