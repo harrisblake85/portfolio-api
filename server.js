@@ -7,34 +7,7 @@ const mongoose = require('mongoose');
 const jwt      = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
- service: 'gmail',
- auth: {
-        user: process.env.GMAIL_EMAIL,
-        pass: process.env.GMAIL_PASS
-    }
-});
 
-const mailOptions = {
-  from: process.env.GMAIL_EMAIL, // sender address
-  to: 'harrisblake85@gmail.com', // list of receivers
-  subject: 'Subject of your email pls work', // Subject line
-  html: '<p>Your html here</p>'// plain text body
-};
-
-transporter.sendMail(mailOptions, function (err, info) {
-   if(err)
-     console.log(err)
-     console.log("DIDNT SEND EMAIL");
-     console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");
-   else
-     console.log(info);
-     console.log("DID SEND EMAIL");
-     console.log("DID SEND EMAIL");
-     console.log("DID SEND EMAIL");
-     console.log("DID SEND EMAIL");
-     console.log("DID SEND EMAIL");
-});
 
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
 require('dotenv').config();
@@ -94,6 +67,35 @@ const submissionsController = require('./controllers/submissions.js');
 
 const usersController = require('./controllers/users.js');
 app.get('/', async (req,res) => {
+  const transporter = nodemailer.createTransport({
+   service: 'gmail',
+   auth: {
+          user: process.env.GMAIL_EMAIL,
+          pass: process.env.GMAIL_PASS
+      }
+  });
+
+  const mailOptions = {
+    from: process.env.GMAIL_EMAIL, // sender address
+    to: 'harrisblake85@gmail.com', // list of receivers
+    subject: 'Subject of your email pls work', // Subject line
+    html: '<p>Your html here</p>'// plain text body
+  };
+
+  transporter.sendMail(mailOptions, function (err, info) {
+     if(err)
+       console.log(err)
+       console.log("DIDNT SEND EMAIL");
+       console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");console.log("DIDNT SEND EMAIL");
+     else
+       console.log(info);
+       console.log("DID SEND EMAIL");
+       console.log("DID SEND EMAIL");
+       console.log("DID SEND EMAIL");
+       console.log("DID SEND EMAIL");
+       console.log("DID SEND EMAIL");
+  });
+  
   res.send({message:"Hello Welcome To Creatives For A Cause API!"})
 });
 app.use('/users', authUser, usersController);
@@ -104,6 +106,8 @@ app.use('/submissions',authUser, submissionsController);
 app.listen(PORT, () => {
   console.log("CFAC Listening on PORT: ", PORT);
 });
+
+
 
 
 
