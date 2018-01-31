@@ -83,7 +83,7 @@ router.get("/like/:id/", async (req,res) => {
   }
 
 });
-router.get("/cart/checkout", async (req,res) => {
+router.get("/checkout", async (req,res) => {
   if (req.user) {
     try {
       const user       = await User.findById(req.user.id);
