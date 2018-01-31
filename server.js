@@ -5,6 +5,29 @@ const morgan   = require('morgan');
 const cors     = require('cors');
 const mongoose = require('mongoose');
 const jwt      = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+ service: 'gmail',
+ auth: {
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASS
+    }
+});
+
+const mailOptions = {
+  from: process.env.GMAIL_EMAIL, // sender address
+  to: 'harrisblake85@gmail.com', // list of receivers
+  subject: 'Subject of your email pls work', // Subject line
+  html: '<p>Your html here</p>'// plain text body
+};
+
+transporter.sendMail(mailOptions, function (err, info) {
+   if(err)
+     console.log(err)
+   else
+     console.log(info);
+});
 
 const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
 require('dotenv').config();

@@ -26,6 +26,7 @@
     "mongoose": "^5.0.0",
     "mongoose-pagination": "^1.0.0",
     "morgan": "^1.9.0",
+    "nodemailer": "^4.4.2",
     "pretty-error": "^2.1.1"
   }
 }
