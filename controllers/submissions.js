@@ -102,7 +102,7 @@ router.get("/cart/checkout", async (req,res) => {
       }, function (err, res) {
         console.log('err:', err, '; res:', res);
       });
-
+      user.cart = [];
       try {
 
         await user.save();
@@ -115,7 +115,7 @@ router.get("/cart/checkout", async (req,res) => {
         process.env.JWT_SECRET,
         { expiresIn: '14d' }
       );
-        res.status(200).json({submission,user,token});
+        res.status(200).json({user,token});
       } catch (e) {
         res.status(418).json({message:e.message});
       }
