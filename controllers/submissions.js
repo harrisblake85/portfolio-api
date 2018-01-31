@@ -87,7 +87,6 @@ router.get("/cart/checkout", async (req,res) => {
   if (req.user) {
     try {
       const user       = await User.findById(req.user.id);
-      const submission = await Submission.findById(req.params.id);
       // submission.likes = submission.likes+1 || 0;
       console.log(user.email);
       var send = require('gmail-send')({
