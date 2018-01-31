@@ -67,6 +67,7 @@ const submissionsController = require('./controllers/submissions.js');
 
 const usersController = require('./controllers/users.js');
 app.get('/', async (req,res) => {
+  console.log(process.env.GMAIL_EMAIL);
   const transporter = nodemailer.createTransport({
    service: 'gmail',
    auth: {
