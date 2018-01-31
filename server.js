@@ -68,6 +68,7 @@ const submissionsController = require('./controllers/submissions.js');
 const usersController = require('./controllers/users.js');
 app.get('/', async (req,res) => {
   console.log(process.env.GMAIL_EMAIL);
+  console.log(process.env.GMAIL_PASS);
   const transporter = nodemailer.createTransport({
    service: 'gmail',
    auth: {
@@ -82,8 +83,16 @@ app.get('/', async (req,res) => {
     subject: 'Subject of your email pls work', // Subject line
     html: '<p>Your html here</p>'// plain text body
   };
+  try {
+    const response = transporter.sendMail(mailOptions);
+    console.log(response);
+    const json = response.json();
+    console.log(json);
+  } catch (e) {
+    console.log(e);
+  }
 
-  transporter.sendMail(mailOptions);
+
 
   res.send({message:"Hello Welcome To Creatives For A Cause API!"})
 });
