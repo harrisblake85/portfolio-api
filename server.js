@@ -25,6 +25,7 @@ app.get('/', async (req,res) => {
 });
 
 app.post("/email", async (req,res) => {
+  console.log(req.body);
   const name = req.body.name;
   const email = req.body.email;
   const number = req.body.number;
