@@ -1,7 +1,7 @@
 {
-  "name": "creativesforacause_api",
+  "name": "portfolio-api",
   "version": "1.0.0",
-  "description": "CFAC API Node.js",
+  "description": "BlakeHarris API Node.js",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,25 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harrisblake85/creativesforacause_api.git"
+    "url": "git+https://github.com/harrisblake85/portfolio-api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/harrisblake85/creativesforacause_api/issues"
+    "url": "https://github.com/harrisblake85/portfolio-api/issues"
   },
-  "homepage": "https://github.com/harrisblake85/creativesforacause_api#readme",
+  "homepage": "https://github.com/harrisblake85/portfolio-api#readme",
   "dependencies": {
-    "bcrypt": "^1.0.3",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "gmail-send": "^1.2.13",
-    "jsonwebtoken": "^8.1.1",
-    "mongoose": "^5.0.0",
-    "mongoose-pagination": "^1.0.0",
     "morgan": "^1.9.0",
-    "nodemailer": "^4.4.2",
     "pretty-error": "^2.1.1"
   }
 }

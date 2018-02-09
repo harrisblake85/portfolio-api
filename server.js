@@ -2,13 +2,9 @@ const express  = require('express');
 const app      = express();
 const morgan   = require('morgan');
 const cors     = require('cors');
-const mongoose = require('mongoose');
 
 require('dotenv').config();
 const PORT     = process.env.PORT||3010;
-
-const db = mongoose.connection;
-require('pretty-error').start();
 
 // middleware
 app.use(cors());
@@ -25,7 +21,7 @@ app.get('/', async (req,res) => {
   console.log(process.env.GMAIL_EMAIL);
   console.log(process.env.GMAIL_PASS);
   //
-  res.send({message:"Hello Welcome To Creatives For A Cause API!"})
+  res.send({message:"Hello Welcome To Blake Harris!"})
 });
 
 app.post("/email", async (req,res) => {
