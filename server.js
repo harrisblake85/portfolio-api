@@ -3,30 +3,12 @@ const app      = express();
 const morgan   = require('morgan');
 const cors     = require('cors');
 const mongoose = require('mongoose');
-const jwt      = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 
-
-
-const mongoURI = process.env.MONGODB_URI ||"mongodb://localhost/cfac"
 require('dotenv').config();
 const PORT     = process.env.PORT||3010;
 
 const db = mongoose.connection;
 require('pretty-error').start();
-
-// mongoose promise library
-mongoose.Promise = global.Promise;
-mongoose.connect(mongoURI,{});
-
-// Error / success
-db.on('error', (err) => console.log(err.message + ' is Mongod not running?'));
-db.on('connected', () => console.log('mongo connected: ', mongoURI));
-db.on('disconnected', () => console.log('mongo disconnected'));
-
-db.on('open',() => {
-
-});
 
 // middleware
 app.use(cors());
@@ -37,43 +19,40 @@ app.use(express.json());
 app.use(morgan('tiny'));
 // end middleware
 
-const authUser = async (req, res, next) => {
-  console.log('Running auth middleware...');
-  const token =  await req.headers['x-access-token']
-  if (!token) {
-    console.log('no auth token, no user set in req.user')
-    next()
-  }
 
-  else {
-    try {
-      const decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
-      console.log('decoded token: ', decodedToken);
-      req.user = await decodedToken;
-    } catch (e) {
-      console.log(e);
-      console.log('failed to authenticate, no user set in req.user')
-    } finally {
-      next()
-    }
-  }
-}
 
-//Routes
-const submissionsController = require('./controllers/submissions.js');
-
-const usersController = require('./controllers/users.js');
 app.get('/', async (req,res) => {
   console.log(process.env.GMAIL_EMAIL);
   console.log(process.env.GMAIL_PASS);
   //
   res.send({message:"Hello Welcome To Creatives For A Cause API!"})
 });
-app.use('/users', authUser, usersController);
-app.use('/submissions',authUser, submissionsController);
+
+app.post("/email", async (req,res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const number = req.body.number;
+  const message = req.body.message;
+  const html = "<b>"+" name: "+name+" email: "+email+" number: "+number+" message:"+message+"</b>";
+  var send = require('gmail-send')({
+    user: process.env.GMAIL_EMAIL,
+    pass: process.env.GMAIL_PASS,
+    to: 'harrisblake85@gmail.com',
+    html:html
+  });
+
+
+  send({
+    subject: 'Someone Messaged Me From My Site',
+  }, function (err, res) {
+    console.log('err:', err, '; res:', res);
+  });
+
+  res.send({message:"Ur Good",html})
+});
 
 app.listen(PORT, () => {
-  console.log("CFAC Listening on PORT: ", PORT);
+  console.log("Portfolio Listening on PORT: ", PORT);
 });
 
 
